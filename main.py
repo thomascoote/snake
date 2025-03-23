@@ -1,44 +1,72 @@
+from random import randrange
 from turtle import Turtle, Screen
+
+from snake import Snake, Screen
 import time
 import random
+import keyboard
 
 screen = Screen()
-screen.setup(width=600, height=600)
-screen.bgcolor("black")
-screen.tracer(0)
-screen.title("Snake Game")
 
-def snake_direction():
-    pass
+#Initial food
+food = Turtle()
+spawn_position_x = randrange(-260, 260, 20)
+spawn_position_y = randrange(-260, 260, 20)
+food.shape("square")
+food.pen(fillcolor="blue", pencolor="blue")
+food.penup()
+food.goto((spawn_position_x,spawn_position_y))
 
-segment_list = []
-"""Global Options"""
+def screen_setup():
+    screen.setup(width=600, height=600)
+    screen.bgcolor("black")
+    screen.tracer(0)
+    screen.title("Snake Game")
+    screen.update()
 
-"""Starts the game with a 3 segment snake"""
-for i in range (0,4):
-    new_snake = Turtle(shape="square")
-    new_snake.penup()
-    new_snake.pen(fillcolor="white", pencolor="white")
-    new_snake.forward(i*20)
-    segment_list.append(new_snake)
+def check_border(snake_object):
+    snake_x_position = snake_object.first_piece().xcor()
+    snake_y_position = snake_object.first_piece().ycor()
+    if snake_x_position > 260 or snake_y_position > 260 or snake_x_position < -260 or snake_y_position < -260:
+        exit()
 
-game_speed = 0.1
+
+
+def spawn_food():
+    random_x = randrange(-260,260,20)
+    random_y = randrange(-260,260,20)
+    food.goto(random_x,random_y)
+    # print(food.pos())
+
+    # return food
+
+#Hotkeys
+keyboard.add_hotkey('a', lambda: new_snake.turn_left())
+keyboard.add_hotkey('d', lambda: new_snake.turn_right())
+
+screen_setup()
+
+new_snake = Snake(screen)
+
+
+##TODO check if need to grow
+##
+
+
+score = 0
 is_on = True
 while is_on:
-    segment_list[len(segment_list)-1].pen(fillcolor="red",pencolor="red")
-    screen.update()
-    for i in range(0,len(segment_list)-1,1):
-        new_x = segment_list[i+1].xcor()
-        new_y = segment_list[i+1].ycor()
-        segment_list[i].goto(new_x,new_y)
-        segment_list[i].pen(pencolor="yellow",fillcolor="yellow")
-        screen.update()
-    segment_list[len(segment_list)-1].forward(20)
-    time.sleep(game_speed)
+    new_snake.move()
+    check_border(new_snake)
+    new_snake.grow()
 
+    # print(food.pos())
+    # print(new_snake.first_piece().pos())
 
-screen.update()
-
+    # if food.xcor() == new_snake.first_piece().xcor() and food.ycor() == new_snake.first_piece().ycor():
+    #     score += 1
+    #     spawn_food()
+    #     print(score)
 
 
 
