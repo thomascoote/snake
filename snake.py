@@ -2,6 +2,8 @@ from turtle import Turtle, Screen
 import time
 import keyboard
 
+
+
 class Snake:
 
     def __init__(self, screen):
@@ -12,7 +14,7 @@ class Snake:
         self.screen = screen
 
     def first_piece(self):
-        return self.segment_list[len(self.segment_list) - 1]
+        return self.segment_list[len(self.segment_list)-1]
 
     def initial_segments(self):
         self.segment_list = []
@@ -23,6 +25,9 @@ class Snake:
             new_snake.pen(fillcolor="white", pencolor="white")
             new_snake.goto(-i * 20, 0)
             self.segment_list.append(new_snake)
+
+    def current_segments(self):
+        return self.segment_list
 
     def move(self):
         segment_list = self.segment_list
@@ -36,23 +41,20 @@ class Snake:
             segment_list[i].pen(pencolor="white", fillcolor="white")
         first_segment.forward(20)
         self.screen.update()
-        time.sleep(0.3)
+        time.sleep(0.2)
 
-    # def grow(self):
-    #     last_piece = self.segment_list[len(self.segment_list)-1]
-    #     piece_x = last_piece.xcor()
-    #     piece_y = last_piece.ycor()
-    #     piece_dir = last_piece.heading()
-    #     #New piece to be added
-    #     new_piece = Turtle(shape="square")
-    #     new_piece.xcor =
-
-
+    def grow(self):
+        new=Turtle()
+        self.segment_list.insert(0,new)
+        self.screen.update()
+        new.shape("square")
+        new.pen(pencolor="white",fillcolor="white", pendown = False)
 
     def turn_left(self):
         segment_list = self.segment_list
         first_segment = segment_list[len(segment_list) - 1]
         first_segment.left(90)
+
     def turn_right(self):
         segment_list = self.segment_list
         first_segment = segment_list[len(segment_list) - 1]
