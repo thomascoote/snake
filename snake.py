@@ -38,10 +38,14 @@ class Snake:
         self.screen.update()
         time.sleep(0.3)
 
-    def grow(self):
-        last_piece = self.segment_list[len(self.segment_list)-1]
-        self.segment_list.append(last_piece)
-
+    # def grow(self):
+    #     last_piece = self.segment_list[len(self.segment_list)-1]
+    #     piece_x = last_piece.xcor()
+    #     piece_y = last_piece.ycor()
+    #     piece_dir = last_piece.heading()
+    #     #New piece to be added
+    #     new_piece = Turtle(shape="square")
+    #     new_piece.xcor =
 
 
 

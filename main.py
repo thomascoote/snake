@@ -59,6 +59,7 @@ while is_on:
     new_snake.move()
     check_border(new_snake)
     new_snake.grow()
+    print(new_snake.first_piece().heading())
 
     # print(food.pos())
     # print(new_snake.first_piece().pos())
