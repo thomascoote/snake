@@ -6,12 +6,12 @@ import keyboard
 
 class Snake:
 
-    def __init__(self, screen):
+    def __init__(self):
         self.turtle = Turtle()
         self.colour = "white"
         self.shape ="square"
         self.initial_segments()
-        self.screen = screen
+        self.screen = Screen()
 
     def first_piece(self):
         return self.segment_list[len(self.segment_list)-1]
@@ -59,3 +59,8 @@ class Snake:
         segment_list = self.segment_list
         first_segment = segment_list[len(segment_list) - 1]
         first_segment.right(90)
+
+    def reset(self):
+        for i in self.segment_list:
+            i.goto(1000,1000)
+            i.clear()

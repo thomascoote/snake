@@ -1,10 +1,12 @@
 from random import randrange
 from turtle import Turtle, Screen
-
+from scoreboard import Scoreboard
 from snake import Snake, Screen
 import time
 import random
 import keyboard
+
+#TODO - High Score module
 
 screen = Screen()
 
@@ -16,6 +18,8 @@ food.shape("square")
 food.pen(fillcolor="blue", pencolor="blue")
 food.penup()
 food.goto((spawn_position_x,spawn_position_y))
+
+score = Scoreboard()
 
 def screen_setup():
     screen.setup(width=600, height=600)
@@ -35,54 +39,52 @@ def spawn_food():
     random_y = randrange(-260,260,20)
     food.goto(random_x,random_y)
 
+def check_eat():
+    new_snake_x = round(new_snake.first_piece().pos()[0],2)
+    new_snake_y = round(new_snake.first_piece().pos()[1],2)
+    snake_head_pos = (new_snake_x,new_snake_y)
+    food_x = food.pos()[0]
+    food_y = food.pos()[1]
+
+    # print(f"{new_snake_x},{new_snake_y},{food_x},{food_y}")
+    if snake_head_pos == food.pos():
+        new_snake.grow()
+        spawn_food()
+        score.increase_score()
+    else:
+        pass
+
 def check_overlap():
-    counter = 0
     segment_positions = []
     for i in new_snake.current_segments():
-        counter += 1
         segment_positions.append(i.pos())
-        """For debug"""
-        # print(segment_positions)
-        # print(new_snake.first_piece().pos())
-        """"""
-    for i in range(0, len(segment_positions)-1):
+
+    for i in range(1, len(segment_positions)):  # Start from 1 to exclude the head.
         if segment_positions[i] == new_snake.first_piece().pos():
-            exit()
+            print(f"Collision detected: {segment_positions[i]} equals head at {new_snake.first_piece().pos()}")
+
 
 #Hotkeys
 keyboard.add_hotkey('a', lambda: new_snake.turn_left())
 keyboard.add_hotkey('d', lambda: new_snake.turn_right())
 
 screen_setup()
+new_snake = Snake()
 
-new_snake = Snake(screen)
-
-
-##TODO check if need to grow
-##
-score = 0
 tick_counter = 0
 is_on = True
 while is_on:
     tick_counter += 1
     new_snake.move()
+    check_eat()
     check_border(new_snake)
-    food_x = int(food.xcor())
-    food_y = int(food.ycor())
-    first_x = new_snake.first_piece().xcor()
-    first_y = new_snake.first_piece().ycor()
-    print(f"{food.pos()} --- {new_snake.first_piece().pos()}")
+
     if tick_counter > 5:
         check_overlap()
 
-
-    if int(new_snake.first_piece().xcor()) in range(food_x-10,food_x+10) and food.ycor() == int(new_snake.first_piece().ycor()) in range(food_y-10,food_y+10):
-        score += 1
-        spawn_food()
-        print(score)
-        new_snake.grow()
-
-
-
-
+    if tick_counter == 20:
+        for i in new_snake.segment_list:
+            i.clear()
+        new_snake = Snake()
+exit()
 screen.exitonclick()
