@@ -37,6 +37,9 @@ def move_down():
     player.setheading(270)
     screen.tracer(1)
 
+def forward():
+    player.forward(20)
+
 #Make the starting snake
 player = snake.Snake()
 print("Player initialised")
@@ -51,8 +54,13 @@ screen.listen()
 
 is_on = True
 while is_on:
-    player.forward(20)
+    #Define FORWARD for screen.ontimer to use
+
+    screen.tracer(0)
     player.update_snake()
-    time.sleep(0.1)
+    screen.tracer(1)
+    screen.ontimer(fun=forward(), t=100)
+
+    # time.sleep(0.5)
 
 screen.exitonclick()

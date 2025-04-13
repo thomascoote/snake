@@ -32,8 +32,14 @@ class Snake(Turtle):
             new_segment.goto((-20)*i,0)
 
     def update_snake(self):
-        #Move the first body segment to
-        for i in self.player_segs:
-            print(f"{i} location = {i.xcor()}")
-            time.sleep(0.5)
 
+        self.player_segs[0].pen(fillcolor="blue")
+        self.player_segs[1].pen(fillcolor="yellow")
+        self.player_segs[2].pen(fillcolor="pink")
+
+        # Move the body segment to where the segment in front was. Start at index 1, head is index 0
+        for i in range(len(self.player_segs)-1,0,-1):
+            self.player_segs[i].goto(self.player_segs[i-1].xcor(),self.player_segs[i-1].ycor())
+
+        # self.player_segs[2].goto(self.player_segs[1].xcor(),self.player_segs[1].ycor())
+        # self.player_segs[1].goto(self.player_segs[0].xcor(),self.player_segs[0].ycor())
