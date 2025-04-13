@@ -1,66 +1,39 @@
 from turtle import Turtle, Screen
 import time
-import keyboard
 
+SNAKE_COLOUR = "white"
+SNAKE_SIZE = 20
+SNAKE_SHAPE = "square"
+PEN_SETUP = {
+    "pencolor":["white"],
+    "fillcolor":["white"],
+    "pensize":[20],
+}
 
-
-class Snake:
-
+class Snake(Turtle):
     def __init__(self):
-        self.turtle = Turtle()
-        self.colour = "white"
-        self.shape ="square"
-        self.initial_segments()
-        self.screen = Screen()
+        super().__init__()
+        self.player_segs = [self]
+        self.color(SNAKE_COLOUR)
+        self.shape(SNAKE_SHAPE)
+        self.pen(PEN_SETUP)
+        self.penup()
+        self.start()
 
-    def first_piece(self):
-        return self.segment_list[len(self.segment_list)-1]
 
-    def initial_segments(self):
-        self.segment_list = []
+    def start(self):
+        #INITIAL SEGMENTS
+        for i in range(1,3):
+            new_segment = Turtle()
+            new_segment.penup()
+            new_segment.pen(PEN_SETUP)
+            new_segment.shape(SNAKE_SHAPE)
+            self.player_segs.append(new_segment)
+            new_segment.goto((-20)*i,0)
 
-        for i in range(0, 4):
-            new_snake = Turtle(shape="square")
-            new_snake.penup()
-            new_snake.pen(fillcolor="white", pencolor="white")
-            new_snake.goto(-i * 20, 0)
-            self.segment_list.append(new_snake)
+    def update_snake(self):
+        #Move the first body segment to
+        for i in self.player_segs:
+            print(f"{i} location = {i.xcor()}")
+            time.sleep(0.5)
 
-    def current_segments(self):
-        return self.segment_list
-
-    def move(self):
-        segment_list = self.segment_list
-        first_segment = self.first_piece()
-        first_segment.pen(fillcolor="white", pencolor="white")
-        self.screen.update()
-        for i in range(0, len(segment_list) - 1, 1):
-            new_x = segment_list[i + 1].xcor()
-            new_y = segment_list[i + 1].ycor()
-            segment_list[i].goto(new_x, new_y)
-            segment_list[i].pen(pencolor="white", fillcolor="white")
-        first_segment.forward(20)
-        self.screen.update()
-        time.sleep(0.2)
-
-    def grow(self):
-        new=Turtle()
-        self.segment_list.insert(0,new)
-        self.screen.update()
-        new.shape("square")
-        new.pen(pencolor="white",fillcolor="white", pendown = False)
-
-    def turn_left(self):
-        segment_list = self.segment_list
-        first_segment = segment_list[len(segment_list) - 1]
-        first_segment.left(90)
-
-    def turn_right(self):
-        segment_list = self.segment_list
-        first_segment = segment_list[len(segment_list) - 1]
-        first_segment.right(90)
-
-    def reset(self):
-        for i in self.segment_list:
-            i.goto(1000,1000)
-            i.clear()
