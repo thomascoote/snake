@@ -1,6 +1,8 @@
 from turtle import Turtle, Screen
 import time
 
+from attr.validators import max_len
+
 SNAKE_COLOUR = "white"
 SNAKE_SIZE = 20
 SNAKE_SHAPE = "square"
@@ -37,9 +39,15 @@ class Snake(Turtle):
         self.player_segs[1].pen(fillcolor="yellow")
         self.player_segs[2].pen(fillcolor="pink")
 
-        # Move the body segment to where the segment in front was. Start at index 1, head is index 0
+        # Move the body segment to where the segment in front was. Start at index max, head is index 0
         for i in range(len(self.player_segs)-1,0,-1):
             self.player_segs[i].goto(self.player_segs[i-1].xcor(),self.player_segs[i-1].ycor())
 
-        # self.player_segs[2].goto(self.player_segs[1].xcor(),self.player_segs[1].ycor())
-        # self.player_segs[1].goto(self.player_segs[0].xcor(),self.player_segs[0].ycor())
+    def grow(self):
+        new_segment = Turtle()
+        new_segment = Turtle()
+        new_segment.penup()
+        new_segment.pen(PEN_SETUP)
+        new_segment.shape(SNAKE_SHAPE)
+        self.player_segs.append(new_segment)
+        new_segment.goto(self.player_segs[len(self.player_segs)-1].xcor(),self.player_segs[len(self.player_segs)-1].ycor())
