@@ -2,11 +2,13 @@ from random import randrange
 from turtle import Turtle, Screen
 import time
 import snake
+import settings
+import food
 
 screen = Screen()
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 800
+SCREEN_WIDTH = settings.SCREEN_WIDTH
+SCREEN_HEIGHT = settings.SCREEN_HEIGHT
 
 screen.setup(width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
 screen.bgcolor("black")
@@ -58,8 +60,12 @@ screen.onkeypress(fun=move_right, key="d")
 
 screen.listen()
 
+#Spawn the food
+screen.tracer(0)
+spawned_food = food.Food()
+screen.tracer(1)
 
-counter = 0
+print(spawned_food.pos())
 is_on = True
 while is_on:
 
@@ -71,10 +77,12 @@ while is_on:
     #Reenable screen update after all segments in their new position.
     screen.tracer(1)
 
-    #TEST
-    while counter < 5:
-        counter += 1
-        grow()
+    #Check if head has eaten some food
+    if player.distance(spawned_food) < 5:
+        screen.tracer(0)
+        spawned_food.move_food()
+        screen.tracer(1)
+        print(f"PLAYER = {player.pos()}, FOOD = {spawned_food.pos()}")
 
     #Checks if player hits the wall
     bounds_checker()

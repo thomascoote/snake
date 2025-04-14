@@ -1,22 +1,16 @@
 from turtle import Turtle, Screen
 import time
 
-from attr.validators import max_len
+import settings
 
-SNAKE_COLOUR = "white"
-SNAKE_SIZE = 20
-SNAKE_SHAPE = "square"
-PEN_SETUP = {
-    "pencolor":["white"],
-    "fillcolor":["white"],
-    "pensize":[20],
-}
+SNAKE_SIZE = settings.SNAKE_SIZE
+SNAKE_SHAPE = settings.SNAKE_SHAPE
+PEN_SETUP = settings.PEN_SETUP
 
 class Snake(Turtle):
     def __init__(self):
         super().__init__()
         self.player_segs = [self]
-        self.color(SNAKE_COLOUR)
         self.shape(SNAKE_SHAPE)
         self.pen(PEN_SETUP)
         self.penup()
