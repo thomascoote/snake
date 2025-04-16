@@ -25,7 +25,7 @@ class Food(Turtle):
         self.goto(spawn_pos)
 
     def move_food(self):
-        move_x = random.randrange(int(-SCREEN_X / 2), int(SCREEN_X / 2), 20)
-        move_y = random.randrange(int(-SCREEN_Y / 2), int(SCREEN_Y / 2), 20)
+        move_x = random.randrange(int((-SCREEN_X / 2)+20), int((SCREEN_X / 2)-20), 20)
+        move_y = random.randrange(int((-SCREEN_Y / 2)+20), int((SCREEN_Y / 2)-20), 20)
         move_pos = (move_x,move_y)
         self.goto(move_pos)

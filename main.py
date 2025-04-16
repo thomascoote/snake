@@ -1,18 +1,21 @@
 from random import randrange
 from turtle import Turtle, Screen
 import time
+
+import scoreboard
 import snake
 import settings
 import food
+from scoreboard import Scoreboard
 
 screen = Screen()
+score = Scoreboard()
 
 SCREEN_WIDTH = settings.SCREEN_WIDTH
 SCREEN_HEIGHT = settings.SCREEN_HEIGHT
 
 screen.setup(width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
 screen.bgcolor("black")
-
 def bounds_checker():
     if (SCREEN_WIDTH/2) < player.xcor() > (SCREEN_WIDTH/2) or (SCREEN_HEIGHT/2) < player.ycor() > (SCREEN_HEIGHT/2):
         exit()
@@ -51,7 +54,11 @@ def forward():
 
 #Make the starting snake
 player = snake.Snake()
-print("Player initialised")
+
+#Initialise the scoreboard
+screen.tracer(0)
+scoreboard.Scoreboard()
+screen.tracer(1)
 
 screen.onkeypress(fun=move_up, key="w")
 screen.onkeypress(fun=move_left, key="a")
@@ -80,9 +87,10 @@ while is_on:
     #Check if head has eaten some food
     if player.distance(spawned_food) < 5:
         screen.tracer(0)
+        player.grow()
         spawned_food.move_food()
+        score.increase_score()
         screen.tracer(1)
-        print(f"PLAYER = {player.pos()}, FOOD = {spawned_food.pos()}")
 
     #Checks if player hits the wall
     bounds_checker()
