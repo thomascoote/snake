@@ -1,53 +1,80 @@
-from turtle import Turtle, Screen
-import time
+# snake.py
 
+from turtle import Turtle
 import settings
 
-SNAKE_SIZE = settings.SNAKE_SIZE
-SNAKE_SHAPE = settings.SNAKE_SHAPE
-PEN_SETUP = settings.PEN_SETUP
+STARTING_POSITIONS = [
+    (0, 0),
+    (-settings.SNAKE_SIZE, 0),
+    (-settings.SNAKE_SIZE * 2, 0)
+]
+MOVE_DISTANCE = settings.SNAKE_SIZE
+SNAKE_SHAPE   = settings.SNAKE_SHAPE
+PEN_SETUP     = settings.PEN_SETUP
 
-class Snake(Turtle):
+class Snake:
     def __init__(self):
-        super().__init__()
-        self.player_segs = [self]
-        self.shape(SNAKE_SHAPE)
-        self.pen(PEN_SETUP)
-        self.penup()
-        self.start()
+        self.segments = []
+        self.create_snake()
+        self.head = self.segments[0]
 
-    def start(self):
-        #INITIAL SEGMENTS
-        for i in range(1,3):
-            new_segment = Turtle()
-            new_segment.penup()
-            new_segment.pen(PEN_SETUP)
-            new_segment.shape(SNAKE_SHAPE)
-            self.player_segs.append(new_segment)
-            new_segment.goto((-20)*i,0)
+    def create_snake(self):
+        """Build the head + two body segments."""
+        for pos in STARTING_POSITIONS:
+            self.add_segment(pos)
 
-    def update_snake(self):
+    def add_segment(self, position):
+        """Create one segment at `position`."""
+        seg = Turtle()
+        seg.shape(SNAKE_SHAPE)
+        seg.penup()
+        seg.pen(**PEN_SETUP)
+        seg.goto(position)
+        self.segments.append(seg)
 
-        self.player_segs[0].pen(fillcolor="blue")
-        self.player_segs[1].pen(fillcolor="yellow")
-        self.player_segs[2].pen(fillcolor="pink")
+    def extend(self):
+        """Add a segment at the tail’s current position."""
+        tail_pos = self.segments[-1].position()
+        self.add_segment(tail_pos)
 
-        # Move the body segment to where the segment in front was. Start at index max, head is index 0
-        for i in range(len(self.player_segs)-1,0,-1):
-            self.player_segs[i].goto(self.player_segs[i-1].xcor(),self.player_segs[i-1].ycor())
+    def move(self):
+        """Move each segment to the spot vacated by the one in front."""
+        for idx in range(len(self.segments) - 1, 0, -1):
+            x = self.segments[idx - 1].xcor()
+            y = self.segments[idx - 1].ycor()
+            self.segments[idx].goto(x, y)
+        self.head.forward(MOVE_DISTANCE)
 
-    def grow(self):
-        new_segment = Turtle()
-        new_segment.penup()
-        new_segment.pen(fillcolor="black",pencolor="black")
-        new_segment.goto(-1000,-1000)
-        new_segment.pen(PEN_SETUP)
-        new_segment.shape(SNAKE_SHAPE)
-        self.player_segs.append(new_segment)
+    # direction controls — prevents 180° turns
+    def up(self):
+        if self.head.heading() != 270:
+            self.head.setheading(90)
+
+    def down(self):
+        if self.head.heading() != 90:
+            self.head.setheading(270)
+
+    def left(self):
+        if self.head.heading() != 0:
+            self.head.setheading(180)
+
+    def right(self):
+        if self.head.heading() != 180:
+            self.head.setheading(0)
 
     def collision_check(self):
-        for i in range(len(self.player_segs)-1,1,-1):
-            if self.player_segs[i].distance(self.player_segs[0]) < 20:
+        """Return True if head collides with any *extra* segment."""
+        for seg in self.segments[3:]:
+            if self.head.distance(seg) < settings.SNAKE_SIZE:
                 return True
-            else:
-                return False
+        return False
+
+    def reset(self):
+        """Hide all old segments and rebuild the 3‑segment snake."""
+        for seg in self.segments:
+            seg.hideturtle()
+            seg.goto(1000, 1000)
+        self.segments.clear()
+        self.create_snake()
+        self.head = self.segments[0]
+        self.head.setheading(0)
