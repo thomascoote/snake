@@ -11,7 +11,6 @@ class Scoreboard(Turtle):
         super().__init__()
         self.score = 0
         self.color("white")
-        self.pen(PEN_SETUP)
         self.penup()
         self.high = 0
         self.hideturtle()
@@ -24,8 +23,26 @@ class Scoreboard(Turtle):
         self.write(f"High score: {self.high}", align="right", font=FONT)
 
     def increase_score(self):
+        self.write_over_black()
         self.score += 1
-        self.screen.update()
         if self.score > self.high:
             self.high = self.score
         self.update_scoreboard()
+
+    def reset_scoreboard(self):
+        self.write_over_black()
+        self.score = 0
+        print(self.score)
+        self.update_scoreboard()
+
+    def write_over_black(self):
+        #Write over previous text with black
+        self.screen.tracer(0)
+        self.pen(pensize=100,pencolor="black",fillcolor="black")
+        self.shape("square")
+        self.goto(CURRENT_SCORE_POS)
+        self.pendown()
+        self.goto(HIGH_SCORE_POS)
+        self.penup()
+        #Set pen back to writing mode
+        self.pen(PEN_SETUP)

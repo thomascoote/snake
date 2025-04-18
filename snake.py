@@ -36,7 +36,6 @@ class Snake(Turtle):
         for i in range(len(self.player_segs)-1,0,-1):
             self.player_segs[i].goto(self.player_segs[i-1].xcor(),self.player_segs[i-1].ycor())
 
-
     def grow(self):
         new_segment = Turtle()
         new_segment.penup()
@@ -46,6 +45,9 @@ class Snake(Turtle):
         new_segment.shape(SNAKE_SHAPE)
         self.player_segs.append(new_segment)
 
-        #Moves the newly added segment to the previous position of the previous index item
-        # new_segment.goto(self.player_segs[len(self.player_segs)-1].xcor(),
-        #                  self.player_segs[len(self.player_segs)-1].ycor())
+    def collision_check(self):
+        for i in range(len(self.player_segs)-1,1,-1):
+            if self.player_segs[i].distance(self.player_segs[0]) < 20:
+                return True
+            else:
+                return False

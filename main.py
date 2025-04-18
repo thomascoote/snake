@@ -16,9 +16,14 @@ SCREEN_HEIGHT = settings.SCREEN_HEIGHT
 
 screen.setup(width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
 screen.bgcolor("black")
+
 def bounds_checker():
-    if (SCREEN_WIDTH/2) < player.xcor() > (SCREEN_WIDTH/2) or (SCREEN_HEIGHT/2) < player.ycor() > (SCREEN_HEIGHT/2):
-        exit()
+    if (
+        player.xcor() < (-SCREEN_WIDTH)/2) or \
+        player.xcor() > SCREEN_WIDTH/2 or \
+        player.ycor() < -(SCREEN_HEIGHT/2) or \
+        player.ycor() > SCREEN_HEIGHT/2:
+        score.reset_scoreboard()
 
 def grow():
     player.grow()
@@ -78,7 +83,15 @@ while is_on:
 
     #Disable screen update while moving the snake segments into their new position
     screen.tracer(0)
+
+    #For debug
+    if len(player.player_segs) < 5:
+        for i in range(0,5):
+            player.grow()
+
     player.update_snake()
+    if player.collision_check():
+        exit()
     screen.ontimer(fun=forward(), t=100)
 
     #Reenable screen update after all segments in their new position.
